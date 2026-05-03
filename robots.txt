@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://tokyolefty.github.io/tvca/sitemap.xml
