@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>東京タワーヴュークリニック麻布十番</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy:      #1c2b3a;
+      --navy-deep: #111d28;
+      --gold:      #b8935a;
+      --gold-light:#d4ab72;
+      --ivory:     #faf9f7;
+      --white:     #ffffff;
+      --stone:     #f2f0ec;
+      --text:      #1e1e1e;
+      --muted:     #6b6b6b;
+      --border:    #e0ddd8;
+      --shadow-sm: 0 2px 12px rgba(0,0,0,.06);
+      --shadow-md: 0 8px 32px rgba(0,0,0,.10);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--ivory);
+      color: var(--text);
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: 15px;
+      line-height: 1.8;
+      font-weight: 300;
+    }
+    body.en {
+      font-family: 'Inter', 'Noto Sans JP', sans-serif;
+      line-height: 1.65;
+    }
+
+    /* ── TOP BAR ── */
+    .topbar {
+      background: var(--navy-deep);
+      color: rgba(255,255,255,.6);
+      font-size: 12px;
+      letter-spacing: .5px;
+      padding: 8px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .topbar-left { display: flex; align-items: center; gap: 20px; }
+    .topbar-left span { display: flex; align-items: center; gap: 5px; }
+    .topbar a { color: rgba(255,255,255,.6); text-decoration: none; }
+
+    /* LANG TOGGLE — always in topbar */
+    .lang-toggle {
+      display: flex;
+      align-items: center;
+      border: 1px solid rgba(255,255,255,.2);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .lang-btn {
+      background: none;
+      border: none;
+      color: rgba(255,255,255,.5);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 1px;
+      padding: 4px 12px;
+      cursor: pointer;
+      transition: background .2s, color .2s;
+      text-transform: uppercase;
+    }
+    .lang-btn.on {
+      background: var(--gold);
+      color: var(--white);
+    }
+    .lang-sep {
+      width: 1px;
+      height: 16px;
+      background: rgba(255,255,255,.2);
+    }
+
+    /* ── HEADER ── */
+    header {
+      position: sticky; top: 0; z-index: 200;
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+    }
+    .hdr {
+      max-width: 1200px; margin: 0 auto;
+      padding: 0 32px; height: 72px;
+      display: flex; align-items: center; justify-content: space-between; gap: 24px;
+    }
+
+    .brand { text-decoration: none; color: var(--text); flex-shrink: 0; }
+    .brand-name {
+      font-family: 'Cormorant Garamond', 'Noto Sans JP', serif;
+      font-size: 18px; font-weight: 600; line-height: 1.2;
+      letter-spacing: .3px; color: var(--navy);
+    }
+    .brand-en {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 11px; font-weight: 400; color: var(--gold);
+      letter-spacing: 2px; text-transform: uppercase; margin-top: 2px;
+    }
+
+    nav { display: flex; align-items: center; gap: 0; }
+    nav a {
+      text-decoration: none; color: var(--muted);
+      font-size: 13px; font-weight: 500; letter-spacing: .5px;
+      padding: 8px 16px; position: relative;
+      transition: color .2s;
+      white-space: nowrap;
+    }
+    nav a::after {
+      content: ''; position: absolute; bottom: 0; left: 50%; right: 50%;
+      height: 2px; background: var(--gold);
+      transition: left .25s, right .25s;
+    }
+    nav a:hover { color: var(--navy); }
+    nav a:hover::after { left: 16px; right: 16px; }
+
+    .hdr-cta {
+      background: var(--navy); color: var(--white);
+      border: none; padding: 10px 22px; font-size: 13px; font-weight: 500;
+      letter-spacing: .5px; cursor: pointer; text-decoration: none;
+      transition: background .2s;
+      white-space: nowrap; border-radius: 3px;
+      display: inline-flex; align-items: center; gap: 8px;
+    }
+    .hdr-cta:hover { background: var(--gold); }
+
+    .ham {
+      display: none; flex-direction: column; gap: 5px;
+      background: none; border: none; cursor: pointer; padding: 4px;
+    }
+    .ham span { width: 22px; height: 1.5px; background: var(--text); border-radius: 2px; display: block; }
+
+    /* mobile nav */
+    .mob-nav {
+      display: none; background: var(--white);
+      border-top: 1px solid var(--border); padding: 8px 24px 16px;
+      flex-direction: column;
+    }
+    .mob-nav.open { display: flex; }
+    .mob-nav a {
+      color: var(--text); text-decoration: none; font-size: 15px;
+      padding: 12px 0; border-bottom: 1px solid var(--border);
+      letter-spacing: .3px;
+    }
+    .mob-nav a:last-child { border-bottom: none; }
+
+    /* ── HERO ── */
+    .hero {
+      background: var(--navy);
+      min-height: 600px;
+      display: flex; align-items: center;
+      position: relative; overflow: hidden;
+    }
+    /* subtle texture overlay */
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        linear-gradient(135deg, rgba(28,43,58,.95) 0%, rgba(28,43,58,.80) 60%, rgba(28,43,58,.65) 100%);
+    }
+    /* faint geometric accent */
+    .hero::after {
+      content: '';
+      position: absolute; right: -80px; top: -80px;
+      width: 500px; height: 500px;
+      border: 1px solid rgba(184,147,90,.15);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .hero-inner {
+      position: relative; z-index: 1;
+      max-width: 1200px; margin: 0 auto;
+      padding: 100px 32px;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center;
+    }
+
+    .hero-content {}
+
+    .hero-eyebrow {
+      display: flex; align-items: center; gap: 10px;
+      margin-bottom: 20px;
+    }
+    .hero-eyebrow-line { width: 32px; height: 1px; background: var(--gold); }
+    .hero-eyebrow span {
+      font-size: 11px; letter-spacing: 3px; text-transform: uppercase;
+      color: var(--gold); font-weight: 500;
+    }
+
+    .hero h1 {
+      font-family: 'Cormorant Garamond', 'Noto Sans JP', serif;
+      font-size: clamp(34px, 4.5vw, 58px);
+      font-weight: 500; color: var(--white);
+      line-height: 1.2; margin-bottom: 24px;
+      letter-spacing: -.5px;
+    }
+    body.en .hero h1 { font-family: 'Cormorant Garamond', serif; }
+
+    .hero-desc {
+      font-size: 15px; color: rgba(255,255,255,.65);
+      max-width: 440px; margin-bottom: 40px;
+      line-height: 1.85;
+    }
+
+    .hero-actions { display: flex; gap: 14px; flex-wrap: wrap; }
+
+    .btn-primary {
+      background: var(--gold); color: var(--white);
+      border: none; padding: 14px 32px;
+      font-size: 13px; font-weight: 500; letter-spacing: 1px; text-transform: uppercase;
+      cursor: pointer; text-decoration: none;
+      transition: background .2s, transform .2s;
+      border-radius: 3px; display: inline-block;
+    }
+    .btn-primary:hover { background: var(--gold-light); transform: translateY(-1px); }
+
+    .btn-outline {
+      background: transparent; color: rgba(255,255,255,.8);
+      border: 1px solid rgba(255,255,255,.3);
+      padding: 14px 32px; font-size: 13px; font-weight: 500;
+      letter-spacing: 1px; text-transform: uppercase;
+      cursor: pointer; text-decoration: none;
+      transition: border-color .2s, color .2s;
+      border-radius: 3px; display: inline-block;
+    }
+    .btn-outline:hover { border-color: var(--gold); color: var(--gold); }
+
+    /* hero aside card */
+    .hero-card {
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 8px; padding: 36px;
+      backdrop-filter: blur(8px);
+    }
+    .hero-card-title {
+      font-size: 11px; letter-spacing: 3px; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 24px; font-weight: 500;
+    }
+    .hc-item {
+      display: flex; gap: 14px; align-items: flex-start;
+      padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,.08);
+    }
+    .hc-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .hc-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--gold); margin-top: 8px; flex-shrink: 0; }
+    .hc-item p { font-size: 14px; color: rgba(255,255,255,.75); line-height: 1.6; }
+    .hc-item strong { color: var(--white); font-weight: 500; display: block; margin-bottom: 2px; font-size: 14px; }
+
+    /* ── DIVIDER ── */
+    .divider-bar {
+      background: var(--stone); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+    }
+    .divider-inner {
+      max-width: 1200px; margin: 0 auto; padding: 0 32px;
+      display: flex; align-items: stretch;
+    }
+    .d-stat {
+      flex: 1; padding: 28px 20px;
+      text-align: center; border-right: 1px solid var(--border);
+      display: flex; flex-direction: column; align-items: center; gap: 4px;
+    }
+    .d-stat:last-child { border-right: none; }
+    .d-num  { font-family: 'Cormorant Garamond', serif; font-size: 32px; font-weight: 600; color: var(--navy); line-height: 1; }
+    .d-unit { font-size: 11px; color: var(--gold); font-weight: 500; letter-spacing: 1px; text-transform: uppercase; }
+    .d-lbl  { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+    /* ── SECTIONS ── */
+    section { padding: 96px 32px; }
+    .wrap { max-width: 1200px; margin: 0 auto; }
+
+    .sec-eyebrow {
+      display: flex; align-items: center; gap: 12px; margin-bottom: 14px;
+    }
+    .sec-eyebrow-line { width: 24px; height: 1px; background: var(--gold); }
+    .sec-eyebrow span {
+      font-size: 11px; letter-spacing: 3px; text-transform: uppercase;
+      color: var(--gold); font-weight: 500;
+    }
+
+    .sec-title {
+      font-family: 'Cormorant Garamond', 'Noto Sans JP', serif;
+      font-size: clamp(26px, 3.5vw, 40px); font-weight: 500;
+      color: var(--navy); margin-bottom: 14px; line-height: 1.2;
+    }
+    body.en .sec-title { font-family: 'Cormorant Garamond', serif; }
+
+    .sec-lead { color: var(--muted); max-width: 500px; margin-bottom: 56px; font-size: 15px; }
+
+    /* ── SERVICES ── */
+    #services { background: var(--white); }
+
+    .svc-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px;
+      background: var(--border); border: 1px solid var(--border);
+    }
+
+    .svc-card {
+      background: var(--white); padding: 36px 32px;
+      transition: background .25s;
+      position: relative; overflow: hidden;
+    }
+    .svc-card::before {
+      content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+      height: 2px; background: var(--gold);
+      transform: scaleX(0); transform-origin: left;
+      transition: transform .3s;
+    }
+    .svc-card:hover { background: var(--stone); }
+    .svc-card:hover::before { transform: scaleX(1); }
+
+    .svc-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 40px; font-weight: 400; color: var(--border);
+      line-height: 1; margin-bottom: 20px; transition: color .25s;
+    }
+    .svc-card:hover .svc-num { color: var(--gold); }
+
+    .svc-card h3 {
+      font-size: 15px; font-weight: 500; color: var(--navy);
+      margin-bottom: 10px; letter-spacing: .3px;
+    }
+    .svc-card p { font-size: 13.5px; color: var(--muted); line-height: 1.8; }
+
+    /* ── HOURS ── */
+    #hours { background: var(--stone); }
+
+    .hours-layout { display: grid; grid-template-columns: 1.1fr 1fr; gap: 48px; align-items: start; }
+
+    .tbl { width: 100%; border-collapse: collapse; font-size: 14px; }
+    .tbl thead th {
+      background: var(--navy); color: rgba(255,255,255,.85);
+      padding: 14px 20px; text-align: left;
+      font-size: 11px; font-weight: 500; letter-spacing: 1.5px; text-transform: uppercase;
+    }
+    .tbl thead th:first-child { border-left: 3px solid var(--gold); }
+    .tbl tbody td { padding: 14px 20px; border-bottom: 1px solid var(--border); color: var(--text); background: var(--white); }
+    .tbl tbody tr:last-child td { border-bottom: none; }
+    .t-open   { color: var(--navy); font-weight: 500; }
+    .t-closed { color: var(--gold); font-weight: 400; font-style: italic; }
+
+    .hours-aside {}
+    .hours-aside h3 {
+      font-family: 'Cormorant Garamond', 'Noto Sans JP', serif;
+      font-size: 24px; font-weight: 500; color: var(--navy);
+      margin-bottom: 28px;
+    }
+    body.en .hours-aside h3 { font-family: 'Cormorant Garamond', serif; }
+
+    .info-item { display: flex; gap: 16px; padding: 18px 0; border-bottom: 1px solid var(--border); align-items: flex-start; }
+    .info-item:last-child { border-bottom: none; }
+    .info-label { font-size: 10px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--gold); margin-bottom: 3px; display: block; }
+    .info-item p { font-size: 14px; color: var(--text); line-height: 1.6; }
+    .info-line { width: 1px; background: var(--gold); flex-shrink: 0; min-height: 40px; }
+
+    /* ── ACCESS ── */
+    #access { background: var(--white); }
+
+    .access-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start; }
+
+    .access-details h3 {
+      font-family: 'Cormorant Garamond', 'Noto Sans JP', serif;
+      font-size: 24px; font-weight: 500; color: var(--navy); margin-bottom: 28px;
+    }
+    body.en .access-details h3 { font-family: 'Cormorant Garamond', serif; }
+
+    .a-item { display: flex; gap: 16px; padding: 18px 0; border-bottom: 1px solid var(--border); align-items: flex-start; }
+    .a-item:last-child { border-bottom: none; }
+    .a-label { font-size: 10px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--gold); margin-bottom: 3px; display: block; }
+    .a-line { width: 1px; background: var(--gold); flex-shrink: 0; min-height: 40px; }
+    .a-item p { font-size: 14px; color: var(--text); line-height: 1.6; }
+    .phone-link { color: var(--navy); font-size: 22px; font-weight: 600; font-family: 'Cormorant Garamond', serif; text-decoration: none; letter-spacing: 1px; }
+    .phone-link:hover { color: var(--gold); }
+
+    .map-box { border-radius: 4px; overflow: hidden; border: 1px solid var(--border); height: 420px; box-shadow: var(--shadow-md); }
+    .map-box iframe { width: 100%; height: 100%; border: none; display: block; }
+
+    /* ── CONTACT STRIP ── */
+    .contact-strip {
+      background: var(--navy-deep); color: var(--white);
+      padding: 56px 32px;
+      text-align: center;
+    }
+    .contact-strip .eyebrow {
+      font-size: 11px; letter-spacing: 3px; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 16px; font-weight: 500;
+    }
+    .contact-strip h2 {
+      font-family: 'Cormorant Garamond', 'Noto Sans JP', serif;
+      font-size: clamp(28px, 4vw, 44px); font-weight: 500;
+      margin-bottom: 10px;
+    }
+    body.en .contact-strip h2 { font-family: 'Cormorant Garamond', serif; }
+    .contact-strip .phone-big {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(36px, 5vw, 56px); font-weight: 400; color: var(--gold);
+      letter-spacing: 3px; margin: 20px 0 8px;
+    }
+    .contact-strip .hours-note { font-size: 13px; color: rgba(255,255,255,.5); letter-spacing: .5px; }
+
+    /* ── FOOTER ── */
+    footer { background: var(--navy); color: rgba(255,255,255,.6); padding: 60px 32px 28px; }
+    .ftr { max-width: 1200px; margin: 0 auto; }
+    .ftr-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 56px; margin-bottom: 48px; }
+    .ftr-brand-name {
+      font-family: 'Cormorant Garamond', 'Noto Sans JP', serif;
+      font-size: 18px; font-weight: 600; color: var(--white); margin-bottom: 4px;
+    }
+    .ftr-brand-sub { font-size: 11px; color: var(--gold); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 16px; }
+    .ftr-brand p { font-size: 13px; line-height: 1.8; opacity: .65; }
+    .ftr-col h4 { font-size: 10px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); margin-bottom: 16px; }
+    .ftr-col a { display: block; color: rgba(255,255,255,.5); font-size: 13px; padding: 4px 0; text-decoration: none; transition: color .18s; }
+    .ftr-col a:hover { color: var(--white); }
+    .ftr-bottom {
+      border-top: 1px solid rgba(255,255,255,.1); padding-top: 24px;
+      display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px;
+      font-size: 12px; opacity: .4;
+    }
+
+    /* ── FADE IN ── */
+    .fi { opacity: 0; transform: translateY(16px); transition: opacity .6s ease, transform .6s ease; }
+    .fi.vis { opacity: 1; transform: none; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 960px) {
+      .hero-inner { grid-template-columns: 1fr; padding: 80px 32px; }
+      .hero-card { display: none; }
+      .svc-grid { grid-template-columns: 1fr 1fr; }
+      .hours-layout, .access-layout { grid-template-columns: 1fr; }
+      .ftr-grid { grid-template-columns: 1fr 1fr; }
+      .ftr-brand { grid-column: 1 / -1; }
+    }
+    @media (max-width: 640px) {
+      .topbar-left { display: none; }
+      nav { display: none; }
+      .ham { display: flex; }
+      .hdr { padding: 0 20px; }
+      section { padding: 64px 20px; }
+      .svc-grid { grid-template-columns: 1fr; }
+      .ftr-grid { grid-template-columns: 1fr; }
+      .divider-inner { flex-wrap: wrap; }
+      .d-stat { flex: 0 0 50%; border-bottom: 1px solid var(--border); }
+      .d-stat:nth-child(2n) { border-right: none; }
+      .d-stat:nth-last-child(-n+2) { border-bottom: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="topbar-left">
+    <span>&#9679; <span data-i18n="topPhone"></span></span>
+    <span data-i18n="topHours"></span>
+  </div>
+  <div class="lang-toggle">
+    <button class="lang-btn on" id="btnJP" onclick="setLang('jp')">JP</button>
+    <div class="lang-sep"></div>
+    <button class="lang-btn" id="btnEN" onclick="setLang('en')">EN</button>
+  </div>
+</div>
+
+<!-- HEADER -->
+<header>
+  <div class="hdr">
+    <a href="#" class="brand">
+      <div class="brand-name" data-i18n="brandName"></div>
+      <div class="brand-en"   data-i18n="brandSub"></div>
+    </a>
+    <nav>
+      <a href="#services" data-i18n="navServices"></a>
+      <a href="#hours"    data-i18n="navHours"></a>
+      <a href="#access"   data-i18n="navAccess"></a>
+    </nav>
+    <a href="form.html" class="hdr-cta" data-i18n="navBook"></a>
+    <button class="ham" onclick="toggleMob()"><span></span><span></span><span></span></button>
+  </div>
+  <nav class="mob-nav" id="mobNav">
+    <a href="#services" onclick="toggleMob()" data-i18n="navServices"></a>
+    <a href="#hours"    onclick="toggleMob()" data-i18n="navHours"></a>
+    <a href="#access"   onclick="toggleMob()" data-i18n="navAccess"></a>
+    <a href="form.html" data-i18n="navBook"></a>
+  </nav>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-content">
+      <div class="hero-eyebrow">
+        <div class="hero-eyebrow-line"></div>
+        <span data-i18n="heroEyebrow"></span>
+      </div>
+      <h1 data-i18n-html="heroTitle"></h1>
+      <p class="hero-desc" data-i18n="heroDesc"></p>
+      <div class="hero-actions">
+        <a href="form.html" class="btn-primary" data-i18n="heroBook"></a>
+        <a href="#services"      class="btn-outline"  data-i18n="heroLearn"></a>
+      </div>
+    </div>
+
+    <div class="hero-card">
+      <div class="hero-card-title" data-i18n="cardTitle"></div>
+      <div class="hc-item"><div class="hc-dot"></div><p><strong data-i18n="svc1Title"></strong><span data-i18n="svc1Short"></span></p></div>
+      <div class="hc-item"><div class="hc-dot"></div><p><strong data-i18n="svc2Title"></strong><span data-i18n="svc2Short"></span></p></div>
+      <div class="hc-item"><div class="hc-dot"></div><p><strong data-i18n="svc3Title"></strong><span data-i18n="svc3Short"></span></p></div>
+      <div class="hc-item"><div class="hc-dot"></div><p><strong data-i18n="svc4Title"></strong><span data-i18n="svc4Short"></span></p></div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS DIVIDER -->
+<div class="divider-bar">
+  <div class="divider-inner">
+    <div class="d-stat">
+      <div class="d-num">3</div>
+      <div class="d-unit" data-i18n="statMinUnit"></div>
+      <div class="d-lbl"  data-i18n="statMin"></div>
+    </div>
+    <div class="d-stat">
+      <div class="d-num">EN</div>
+      <div class="d-unit">/ JP</div>
+      <div class="d-lbl" data-i18n="statBilingual"></div>
+    </div>
+    <div class="d-stat">
+      <div class="d-num">6</div>
+      <div class="d-unit" data-i18n="statDaysUnit"></div>
+      <div class="d-lbl"  data-i18n="statDays"></div>
+    </div>
+    <div class="d-stat">
+      <div class="d-num" style="font-size:26px;">Online</div>
+      <div class="d-unit" data-i18n="statTeleUnit"></div>
+      <div class="d-lbl"  data-i18n="statTele"></div>
+    </div>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="wrap">
+    <div class="sec-eyebrow"><div class="sec-eyebrow-line"></div><span data-i18n="secTagServices"></span></div>
+    <h2 class="sec-title" data-i18n="secTitleServices"></h2>
+    <p  class="sec-lead"  data-i18n="secLeadServices"></p>
+    <div class="svc-grid">
+      <div class="svc-card fi"><div class="svc-num">01</div><h3 data-i18n="svc1Title"></h3><p data-i18n="svc1Desc"></p></div>
+      <div class="svc-card fi"><div class="svc-num">02</div><h3 data-i18n="svc2Title"></h3><p data-i18n="svc2Desc"></p></div>
+      <div class="svc-card fi"><div class="svc-num">03</div><h3 data-i18n="svc3Title"></h3><p data-i18n="svc3Desc"></p></div>
+      <div class="svc-card fi"><div class="svc-num">04</div><h3 data-i18n="svc4Title"></h3><p data-i18n="svc4Desc"></p></div>
+      <div class="svc-card fi"><div class="svc-num">05</div><h3 data-i18n="svc5Title"></h3><p data-i18n="svc5Desc"></p></div>
+      <div class="svc-card fi"><div class="svc-num">06</div><h3 data-i18n="svc6Title"></h3><p data-i18n="svc6Desc"></p></div>
+    </div>
+  </div>
+</section>
+
+<!-- HOURS -->
+<section id="hours">
+  <div class="wrap">
+    <div class="sec-eyebrow"><div class="sec-eyebrow-line"></div><span data-i18n="secTagHours"></span></div>
+    <h2 class="sec-title" data-i18n="secTitleHours"></h2>
+    <div class="hours-layout">
+      <table class="tbl fi">
+        <thead>
+          <tr>
+            <th data-i18n="tblDay"></th>
+            <th data-i18n="tblAM"></th>
+            <th data-i18n="tblPM"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td data-i18n="rowMonFri"></td><td class="t-open">9:30 – 12:30</td><td class="t-open">14:30 – 18:00</td></tr>
+          <tr><td data-i18n="rowSat"></td>   <td class="t-open">9:30 – 12:30</td><td class="t-open">14:30 – 18:00</td></tr>
+          <tr><td data-i18n="rowThu"></td>   <td class="t-closed" data-i18n="closed"></td><td class="t-open">14:30 – 18:00</td></tr>
+          <tr><td data-i18n="rowSun"></td>   <td class="t-closed" colspan="2" data-i18n="closedAppt"></td></tr>
+        </tbody>
+      </table>
+
+      <div class="hours-aside fi">
+        <h3 data-i18n="asideTitle"></h3>
+        <div class="info-item"><div class="info-line"></div><p><span class="info-label" data-i18n="lblPhone"></span>03-6809-3207</p></div>
+        <div class="info-item"><div class="info-line"></div><p><span class="info-label">FAX</span>03-6809-3227</p></div>
+        <div class="info-item"><div class="info-line"></div><p><span class="info-label" data-i18n="lblOnline"></span><span data-i18n="onlineDesc"></span></p></div>
+        <div class="info-item"><div class="info-line"></div><p><span class="info-label" data-i18n="lblEn"></span><span data-i18n="enDesc"></span></p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ACCESS -->
+<section id="access">
+  <div class="wrap">
+    <div class="sec-eyebrow"><div class="sec-eyebrow-line"></div><span data-i18n="secTagAccess"></span></div>
+    <h2 class="sec-title" data-i18n="secTitleAccess"></h2>
+    <div class="access-layout">
+      <div class="access-details fi">
+        <h3 data-i18n="accessCardTitle"></h3>
+        <div class="a-item"><div class="a-line"></div><p><span class="a-label" data-i18n="lblAddr"></span><span data-i18n="address"></span></p></div>
+        <div class="a-item"><div class="a-line"></div><p><span class="a-label" data-i18n="lblStation"></span><span data-i18n="station"></span></p></div>
+        <div class="a-item"><div class="a-line"></div><p><span class="a-label" data-i18n="lblDirector"></span><span data-i18n="director"></span></p></div>
+        <div class="a-item"><div class="a-line"></div><p><span class="a-label" data-i18n="lblPhone"></span><a href="tel:0368093207" class="phone-link">03-6809-3207</a></p></div>
+      </div>
+      <div class="map-box fi">
+        <iframe src="https://www.google.com/maps?q=2-14-6+Azabujuban+Minato+Tokyo&output=embed"
+          allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Map"></iframe>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT STRIP -->
+<div class="contact-strip">
+  <div class="eyebrow" data-i18n="contactEyebrow"></div>
+  <h2 data-i18n="contactTitle"></h2>
+  <div class="phone-big">03-6809-3207</div>
+  <div class="hours-note" data-i18n="contactHours"></div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="ftr">
+    <div class="ftr-grid">
+      <div class="ftr-brand">
+        <div class="ftr-brand-name" data-i18n="brandName"></div>
+        <div class="ftr-brand-sub"  data-i18n="brandSub"></div>
+        <p data-i18n="ftrAddr"></p>
+      </div>
+      <div class="ftr-col">
+        <h4 data-i18n="ftrColServices"></h4>
+        <a href="#services" data-i18n="svc1Title"></a>
+        <a href="#services" data-i18n="svc2Title"></a>
+        <a href="#services" data-i18n="svc3Title"></a>
+        <a href="#services" data-i18n="svc6Title"></a>
+      </div>
+      <div class="ftr-col">
+        <h4 data-i18n="ftrColInfo"></h4>
+        <a href="#hours"  data-i18n="navHours"></a>
+        <a href="#access" data-i18n="navAccess"></a>
+        <a href="form.html" data-i18n="navBook"></a>
+      </div>
+    </div>
+    <div class="ftr-bottom">
+      <span>© 2025 東京タワーヴュークリニック麻布十番 / Tokyo Tower View Clinic Azabujuban</span>
+      <span data-i18n="ftrDirector"></span>
+    </div>
+  </div>
+</footer>
+
+<script>
+const T = {
+  jp: {
+    topPhone:        'TEL: 03-6809-3207',
+    topHours:        '月〜水・金・土 9:30〜18:00　木曜午後 14:30〜18:00',
+    brandName:       '東京タワーヴュークリニック麻布十番',
+    brandSub:        'Tokyo Tower View Clinic Azabujuban',
+    navServices:     '診療内容',
+    navHours:        '診療時間',
+    navAccess:       'アクセス',
+    navBook:         'ご予約・お問い合わせ',
+    heroEyebrow:     '麻布十番・東京タワー近く',
+    heroTitle:       '心と体の健康を、<br>あなたのそばで。',
+    heroDesc:        '内科・心療内科・精神科を中心に、保険診療から専門外来まで幅広くご対応します。英語対応可能。',
+    heroBook:        'ご予約はこちら',
+    heroLearn:       '診療内容を見る',
+    cardTitle:       '主な診療内容',
+    statMinUnit:     '分',
+    statMin:         '麻布十番駅から徒歩',
+    statBilingual:   '英語対応可能',
+    statDaysUnit:    '日',
+    statDays:        '週6日診療',
+    statTeleUnit:    '診療',
+    statTele:        'オンライン・往診',
+    secTagServices:  '診療内容',
+    secTitleServices:'専門的な医療サービス',
+    secLeadServices: '保険診療を中心に、患者様一人ひとりに寄り添った医療をご提供しています。',
+    svc1Title:       '内科・一般診療',
+    svc1Short:       '風邪・生活習慣病など',
+    svc1Desc:        '風邪・発熱・生活習慣病など、一般的な内科疾患の保険診療を行います。',
+    svc2Title:       '心療内科・精神科',
+    svc2Short:       'うつ・不安障害・心身症',
+    svc2Desc:        'うつ病・不安障害・心身症など、心の健康に関する診療を丁寧に行います。',
+    svc3Title:       'トラベルクリニック',
+    svc3Short:       '渡航前ワクチン・感染症',
+    svc3Desc:        '海外渡航前のワクチン接種・感染症予防・渡航証明書の発行に対応しています。',
+    svc4Title:       'COVID-19・ワクチン',
+    svc4Short:       'PCR・抗原検査・後遺症',
+    svc4Desc:        'PCR・抗原検査、ワクチン接種、コロナ後遺症の診察を行っています。',
+    svc5Title:       '漢方・アレルギー',
+    svc5Short:       '花粉症・遅発型アレルギー',
+    svc5Desc:        '漢方処方、花粉症、遅発型アレルギー（SIBO含む）の検査・治療を行います。',
+    svc6Title:       '往診・オンライン診療',
+    svc6Short:       'ご自宅・スマートフォン対応',
+    svc6Desc:        'ご自宅への往診と、スマートフォン・PCを使ったオンライン診療に対応しています。',
+    secTagHours:     '診療時間',
+    secTitleHours:   '受付時間のご案内',
+    tblDay:          '曜日',
+    tblAM:           '午前',
+    tblPM:           '午後',
+    rowMonFri:       '月・火・水・金',
+    rowSat:          '土曜',
+    rowThu:          '木曜',
+    rowSun:          '日・祝日',
+    closed:          '休診',
+    closedAppt:      '休診（事前予約で応相談）',
+    asideTitle:      'ご来院の前に',
+    lblPhone:        '電話番号',
+    lblOnline:       'オンライン予約',
+    onlineDesc:      'ウェブサイトよりご予約いただけます。',
+    lblEn:           '英語対応',
+    enDesc:          '英語での診療・ご相談に対応しています。',
+    secTagAccess:    'アクセス',
+    secTitleAccess:  'クリニックへのアクセス',
+    accessCardTitle: '所在地・交通案内',
+    lblAddr:         '住所',
+    address:         '〒106-0045 東京都港区麻布十番2-14-6 イイダビル1階',
+    lblStation:      '最寄り駅',
+    station:         '地下鉄 麻布十番駅より徒歩3分',
+    lblDirector:     '院長',
+    director:        '林 哲也（信州大学医学部卒）',
+    contactEyebrow:  'ご予約・お問い合わせ',
+    contactTitle:    'お気軽にご連絡ください',
+    contactHours:    '月〜水・金・土 9:30〜18:00　｜　木曜午後 14:30〜18:00',
+    ftrAddr:         '〒106-0045 東京都港区麻布十番2-14-6 イイダビル1階\nTEL: 03-6809-3207　FAX: 03-6809-3227',
+    ftrColServices:  '診療内容',
+    ftrColInfo:      'クリニック情報',
+    ftrDirector:     '院長：林 哲也',
+  },
+  en: {
+    topPhone:        'TEL: 03-6809-3207',
+    topHours:        'Mon–Wed, Fri–Sat 9:30–18:00  |  Thu Afternoon 14:30–18:00',
+    brandName:       'Tokyo Tower View Clinic Azabujuban',
+    brandSub:        '東京タワーヴュークリニック麻布十番',
+    navServices:     'Services',
+    navHours:        'Hours',
+    navAccess:       'Access',
+    navBook:         'Book Appointment',
+    heroEyebrow:     'Azabujuban · Near Tokyo Tower',
+    heroTitle:       'Compassionate Care<br>for Mind & Body.',
+    heroDesc:        'A multi-specialty outpatient clinic offering internal medicine, psychosomatic care and psychiatry. English-speaking staff available.',
+    heroBook:        'Book an Appointment',
+    heroLearn:       'View Our Services',
+    cardTitle:       'Our Specialties',
+    statMinUnit:     'min',
+    statMin:         'Walk from Azabujuban Stn.',
+    statBilingual:   'Bilingual Staff',
+    statDaysUnit:    'days',
+    statDays:        'Open per week',
+    statTeleUnit:    'Care',
+    statTele:        'Telemedicine & Home Visits',
+    secTagServices:  'Services',
+    secTitleServices:'Comprehensive Medical Care',
+    secLeadServices: 'Insurance-covered care alongside specialized clinics, tailored to each patient\'s needs.',
+    svc1Title:       'Internal Medicine',
+    svc1Short:       'General health & lifestyle diseases',
+    svc1Desc:        'Insurance-covered care for colds, fever, lifestyle diseases, and general internal medicine.',
+    svc2Title:       'Mental Health & Psychiatry',
+    svc2Short:       'Depression, anxiety & trauma',
+    svc2Desc:        'Compassionate care for depression, anxiety disorders, stress-related illness, grief and trauma.',
+    svc3Title:       'Travel Medicine',
+    svc3Short:       'Pre-travel vaccines & certificates',
+    svc3Desc:        'Pre-travel vaccinations, infection prevention advice, and travel health certificates.',
+    svc4Title:       'COVID-19 & Vaccines',
+    svc4Short:       'PCR testing & long-COVID',
+    svc4Desc:        'PCR and rapid antigen testing, COVID-19 vaccinations, and long-COVID consultation.',
+    svc5Title:       'Herbal Medicine & Allergy',
+    svc5Short:       'Hay fever, SIBO & late-onset allergy',
+    svc5Desc:        'Herbal prescriptions, hay fever, late-onset allergy testing (including SIBO) and treatment.',
+    svc6Title:       'House Calls & Telemedicine',
+    svc6Short:       'Home visits & online consultations',
+    svc6Desc:        'Home visit care and online consultations available via smartphone or PC.',
+    secTagHours:     'Opening Hours',
+    secTitleHours:   'Clinic Hours',
+    tblDay:          'Day',
+    tblAM:           'Morning',
+    tblPM:           'Afternoon',
+    rowMonFri:       'Mon, Tue, Wed, Fri',
+    rowSat:          'Saturday',
+    rowThu:          'Thursday',
+    rowSun:          'Sun / Public Holidays',
+    closed:          'Closed',
+    closedAppt:      'Closed (by prior appointment)',
+    asideTitle:      'Before Your Visit',
+    lblPhone:        'Phone',
+    lblOnline:       'Online Booking',
+    onlineDesc:      'Appointments available online via our website.',
+    lblEn:           'English Support',
+    enDesc:          'English-speaking staff available for all consultations.',
+    secTagAccess:    'Access',
+    secTitleAccess:  'Getting Here',
+    accessCardTitle: 'Location & Directions',
+    lblAddr:         'Address',
+    address:         'IIDA BLDG. 1F, 2-14-6 Azabujuban, Minato-ku, Tokyo 〒106-0045',
+    lblStation:      'Nearest Station',
+    station:         '3-minute walk from Azabujuban Station (Subway)',
+    lblDirector:     'Director',
+    director:        'Tetsuya Hayashi, MD — Shinshu University School of Medicine',
+    contactEyebrow:  'Appointments & Inquiries',
+    contactTitle:    'We Are Here for You',
+    contactHours:    'Mon–Wed, Fri–Sat 9:30–18:00  |  Thursday Afternoon 14:30–18:00',
+    ftrAddr:         'IIDA BLDG. 1F, 2-14-6 Azabujuban, Minato-ku, Tokyo 〒106-0045\nTEL: 03-6809-3207  ·  FAX: 03-6809-3227',
+    ftrColServices:  'Services',
+    ftrColInfo:      'Information',
+    ftrDirector:     'Director: Tetsuya Hayashi, MD',
+  }
+};
+
+function applyLang(lang) {
+  const t = T[lang];
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const k = el.getAttribute('data-i18n');
+    if (t[k] !== undefined) el.textContent = t[k];
+  });
+  document.querySelectorAll('[data-i18n-html]').forEach(el => {
+    const k = el.getAttribute('data-i18n-html');
+    if (t[k] !== undefined) el.innerHTML = t[k];
+  });
+}
+
+function setLang(lang) {
+  document.body.classList.toggle('en', lang === 'en');
+  document.documentElement.lang = lang === 'en' ? 'en' : 'ja';
+  document.getElementById('btnJP').classList.toggle('on', lang === 'jp');
+  document.getElementById('btnEN').classList.toggle('on', lang === 'en');
+  applyLang(lang);
+  localStorage.setItem('tvca-lang', lang);
+}
+
+(function () {
+  const saved    = localStorage.getItem('tvca-lang');
+  const detected = (navigator.language || '').startsWith('ja') ? 'jp' : 'en';
+  setLang(saved || detected);
+})();
+
+function toggleMob() { document.getElementById('mobNav').classList.toggle('open'); }
+
+const obs = new IntersectionObserver(
+  entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('vis'); }),
+  { threshold: 0.08 }
+);
+document.querySelectorAll('.fi').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>

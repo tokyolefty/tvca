@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ご予約・お問い合わせ | Tokyo Tower View Clinic Azabujuban</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy:      #1c2b3a;
+      --navy-deep: #111d28;
+      --gold:      #b8935a;
+      --gold-light:#d4ab72;
+      --ivory:     #faf9f7;
+      --white:     #ffffff;
+      --stone:     #f2f0ec;
+      --text:      #1e1e1e;
+      --muted:     #6b6b6b;
+      --border:    #e0ddd8;
+      --error:     #c0392b;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--ivory);
+      color: var(--text);
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: 15px;
+      line-height: 1.8;
+      font-weight: 300;
+    }
+    body.en {
+      font-family: 'Inter', 'Noto Sans JP', sans-serif;
+      line-height: 1.65;
+    }
+
+    /* ── TOP BAR ── */
+    .topbar {
+      background: var(--navy-deep);
+      color: rgba(255,255,255,.6);
+      font-size: 12px;
+      letter-spacing: .5px;
+      padding: 8px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .topbar-left { display: flex; align-items: center; gap: 20px; }
+
+    .lang-toggle {
+      display: flex; align-items: center;
+      border: 1px solid rgba(255,255,255,.2);
+      border-radius: 4px; overflow: hidden;
+    }
+    .lang-btn {
+      background: none; border: none;
+      color: rgba(255,255,255,.5);
+      font-size: 11px; font-weight: 500; letter-spacing: 1px;
+      padding: 4px 12px; cursor: pointer;
+      transition: background .2s, color .2s;
+      text-transform: uppercase;
+    }
+    .lang-btn.on { background: var(--gold); color: var(--white); }
+    .lang-sep { width: 1px; height: 16px; background: rgba(255,255,255,.2); }
+
+    /* ── HEADER ── */
+    header {
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      box-shadow: 0 1px 8px rgba(0,0,0,.06);
+    }
+    .hdr {
+      max-width: 1200px; margin: 0 auto;
+      padding: 0 32px; height: 72px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .brand { text-decoration: none; color: var(--text); }
+    .brand-name {
+      font-family: 'Cormorant Garamond', 'Noto Sans JP', serif;
+      font-size: 18px; font-weight: 600; color: var(--navy); line-height: 1.2;
+    }
+    .brand-en {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 11px; font-weight: 400; color: var(--gold);
+      letter-spacing: 2px; text-transform: uppercase; margin-top: 2px;
+    }
+    .back-link {
+      color: var(--muted); text-decoration: none; font-size: 13px;
+      display: flex; align-items: center; gap: 6px;
+      transition: color .2s;
+    }
+    .back-link:hover { color: var(--navy); }
+    .back-arrow { font-size: 16px; }
+
+    /* ── PAGE HEADER ── */
+    .page-hero {
+      background: var(--navy);
+      padding: 64px 32px 56px;
+      position: relative; overflow: hidden;
+    }
+    .page-hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(28,43,58,1) 0%, rgba(28,43,58,.85) 100%);
+    }
+    .page-hero-inner {
+      position: relative; max-width: 1200px; margin: 0 auto;
+    }
+    .page-eyebrow {
+      display: flex; align-items: center; gap: 10px; margin-bottom: 16px;
+    }
+    .page-eyebrow-line { width: 28px; height: 1px; background: var(--gold); }
+    .page-eyebrow span {
+      font-size: 11px; letter-spacing: 3px; text-transform: uppercase;
+      color: var(--gold); font-weight: 500;
+    }
+    .page-hero h1 {
+      font-family: 'Cormorant Garamond', 'Noto Sans JP', serif;
+      font-size: clamp(28px, 4vw, 44px); font-weight: 500; color: var(--white);
+      line-height: 1.25; margin-bottom: 12px;
+    }
+    body.en .page-hero h1 { font-family: 'Cormorant Garamond', serif; }
+    .page-hero p { color: rgba(255,255,255,.65); font-size: 15px; max-width: 560px; }
+
+    /* ── FORM SECTION ── */
+    .form-section {
+      max-width: 1200px; margin: 0 auto;
+      padding: 64px 32px 96px;
+      display: grid;
+      grid-template-columns: 1fr 360px;
+      gap: 56px;
+      align-items: start;
+    }
+
+    /* ── FORM ── */
+    .form-wrap {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 48px;
+    }
+
+    .form-group { margin-bottom: 28px; }
+
+    .form-label {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 12px; font-weight: 600; letter-spacing: 1px;
+      text-transform: uppercase; color: var(--navy);
+      margin-bottom: 8px;
+    }
+    .req {
+      background: var(--gold); color: var(--white);
+      font-size: 9px; font-weight: 700; letter-spacing: .5px;
+      padding: 2px 6px; border-radius: 2px; text-transform: uppercase;
+    }
+    .opt {
+      color: var(--muted); font-size: 10px; font-weight: 400;
+      letter-spacing: 0; text-transform: none;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    input[type="date"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      font-size: 15px;
+      font-family: inherit;
+      color: var(--text);
+      background: var(--ivory);
+      transition: border-color .2s, box-shadow .2s;
+      outline: none;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px rgba(184,147,90,.12);
+      background: var(--white);
+    }
+    select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%236b6b6b' d='M6 8L0 0h12z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 16px center;
+      padding-right: 40px;
+      cursor: pointer;
+    }
+    textarea { resize: vertical; min-height: 120px; line-height: 1.7; }
+
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+
+    .radio-group { display: flex; flex-wrap: wrap; gap: 10px; }
+    .radio-option {
+      display: flex; align-items: center; gap: 8px;
+      border: 1px solid var(--border); border-radius: 3px;
+      padding: 10px 18px; cursor: pointer;
+      transition: border-color .2s, background .2s;
+      font-size: 14px;
+    }
+    .radio-option input[type="radio"] {
+      width: 16px; height: 16px; accent-color: var(--gold);
+      margin: 0; padding: 0; background: none; border: none;
+      box-shadow: none; flex-shrink: 0;
+    }
+    .radio-option:has(input:checked) {
+      border-color: var(--gold);
+      background: rgba(184,147,90,.06);
+      color: var(--navy); font-weight: 500;
+    }
+
+    .form-note {
+      font-size: 12px; color: var(--muted); margin-top: 6px; line-height: 1.6;
+    }
+
+    /* Privacy checkbox */
+    .privacy-row {
+      display: flex; gap: 12px; align-items: flex-start;
+      padding: 20px; background: var(--stone);
+      border-radius: 3px; margin-bottom: 28px;
+    }
+    .privacy-row input[type="checkbox"] {
+      width: 18px; height: 18px; flex-shrink: 0; margin-top: 2px;
+      accent-color: var(--gold); cursor: pointer;
+      padding: 0; background: none; border: none; box-shadow: none;
+    }
+    .privacy-row label { font-size: 13px; color: var(--muted); line-height: 1.6; cursor: pointer; }
+    .privacy-row a { color: var(--gold); text-decoration: none; }
+    .privacy-row a:hover { text-decoration: underline; }
+
+    .btn-submit {
+      width: 100%;
+      background: var(--navy); color: var(--white);
+      border: none; padding: 16px 32px;
+      font-size: 13px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase;
+      cursor: pointer; border-radius: 3px;
+      transition: background .2s, transform .15s;
+      font-family: inherit;
+    }
+    .btn-submit:hover { background: var(--gold); transform: translateY(-1px); }
+    .btn-submit:active { transform: none; }
+
+    /* ── SIDEBAR ── */
+    .sidebar {}
+    .sidebar-card {
+      background: var(--white); border: 1px solid var(--border);
+      border-radius: 4px; padding: 32px; margin-bottom: 20px;
+    }
+    .sidebar-card h3 {
+      font-family: 'Cormorant Garamond', 'Noto Sans JP', serif;
+      font-size: 20px; font-weight: 600; color: var(--navy); margin-bottom: 20px;
+    }
+    body.en .sidebar-card h3 { font-family: 'Cormorant Garamond', serif; }
+
+    .side-item {
+      display: flex; gap: 14px; padding: 14px 0;
+      border-bottom: 1px solid var(--border); align-items: flex-start;
+    }
+    .side-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .side-line { width: 2px; background: var(--gold); flex-shrink: 0; min-height: 36px; }
+    .side-label {
+      font-size: 10px; font-weight: 700; letter-spacing: 1.5px;
+      text-transform: uppercase; color: var(--gold); margin-bottom: 3px; display: block;
+    }
+    .side-item p { font-size: 14px; line-height: 1.6; }
+
+    .phone-big {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 26px; font-weight: 500; color: var(--navy);
+      text-decoration: none; letter-spacing: 1px; display: block; margin-top: 2px;
+    }
+    .phone-big:hover { color: var(--gold); }
+
+    .hours-table-sm { width: 100%; font-size: 13px; border-collapse: collapse; }
+    .hours-table-sm td { padding: 7px 0; border-bottom: 1px solid var(--border); vertical-align: top; }
+    .hours-table-sm tr:last-child td { border-bottom: none; }
+    .hours-table-sm td:first-child { color: var(--muted); width: 45%; }
+    .hours-table-sm td:last-child { font-weight: 500; color: var(--navy); }
+    .t-gold { color: var(--gold) !important; font-style: italic; font-weight: 300 !important; }
+
+    /* ── SUCCESS STATE ── */
+    .success-msg {
+      display: none;
+      text-align: center; padding: 56px 32px;
+    }
+    .success-msg.show { display: block; }
+    .success-icon {
+      width: 64px; height: 64px; border-radius: 50%;
+      background: rgba(184,147,90,.12); border: 1px solid var(--gold);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 28px; margin: 0 auto 24px;
+    }
+    .success-msg h2 {
+      font-family: 'Cormorant Garamond', 'Noto Sans JP', serif;
+      font-size: 28px; font-weight: 500; color: var(--navy); margin-bottom: 12px;
+    }
+    body.en .success-msg h2 { font-family: 'Cormorant Garamond', serif; }
+    .success-msg p { color: var(--muted); font-size: 15px; }
+
+    /* ── FOOTER ── */
+    footer { background: var(--navy); color: rgba(255,255,255,.6); padding: 32px; text-align: center; }
+    footer p { font-size: 12px; opacity: .5; }
+    footer a { color: rgba(255,255,255,.5); text-decoration: none; }
+    footer a:hover { color: var(--white); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .form-section { grid-template-columns: 1fr; gap: 36px; }
+      .sidebar { order: -1; }
+    }
+    @media (max-width: 600px) {
+      .form-wrap { padding: 28px 20px; }
+      .form-row { grid-template-columns: 1fr; }
+      .hdr { padding: 0 20px; }
+      .page-hero { padding: 48px 20px 40px; }
+      .form-section { padding: 40px 20px 64px; }
+      .topbar-left { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="topbar-left">
+    <span>TEL: 03-6809-3207</span>
+    <span data-i18n="topHours"></span>
+  </div>
+  <div class="lang-toggle">
+    <button class="lang-btn on" id="btnJP" onclick="setLang('jp')">JP</button>
+    <div class="lang-sep"></div>
+    <button class="lang-btn" id="btnEN" onclick="setLang('en')">EN</button>
+  </div>
+</div>
+
+<!-- HEADER -->
+<header>
+  <div class="hdr">
+    <a href="index.html" class="brand">
+      <div class="brand-name" data-i18n="brandName"></div>
+      <div class="brand-en"   data-i18n="brandSub"></div>
+    </a>
+    <a href="index.html" class="back-link">
+      <span class="back-arrow">←</span>
+      <span data-i18n="backLink"></span>
+    </a>
+  </div>
+</header>
+
+<!-- PAGE HERO -->
+<div class="page-hero">
+  <div class="page-hero-inner">
+    <div class="page-eyebrow">
+      <div class="page-eyebrow-line"></div>
+      <span data-i18n="pageEyebrow"></span>
+    </div>
+    <h1 data-i18n="pageTitle"></h1>
+    <p data-i18n="pageDesc"></p>
+  </div>
+</div>
+
+<!-- FORM + SIDEBAR -->
+<div class="form-section">
+
+  <!-- FORM -->
+  <div>
+    <!-- Success message (shown after submit) -->
+    <div class="success-msg" id="successMsg">
+      <div class="success-icon">✓</div>
+      <h2 data-i18n="successTitle"></h2>
+      <p data-i18n="successDesc"></p>
+    </div>
+
+    <!-- The form -->
+    <!--
+      SETUP INSTRUCTIONS:
+      1. Go to https://formspree.io and create a free account
+      2. Create a new form and enter the doctor's email address
+      3. Replace "YOUR_FORM_ID" in the action URL below with your Formspree form ID
+         Example: action="https://formspree.io/f/xpwzabcd"
+    -->
+    <form
+      id="contactForm"
+      class="form-wrap"
+      action="https://formspree.io/f/YOUR_FORM_ID"
+      method="POST"
+      novalidate
+    >
+      <!-- Hidden field so Formspree knows the language -->
+      <input type="hidden" name="_language" id="hiddenLang" value="jp" />
+      <!-- Redirect back to this page after submit -->
+      <input type="hidden" name="_next" value="" id="hiddenNext" />
+
+      <!-- Visit type -->
+      <div class="form-group">
+        <div class="form-label">
+          <span data-i18n="fieldVisitType"></span>
+          <span class="req" data-i18n="req"></span>
+        </div>
+        <div class="radio-group">
+          <label class="radio-option">
+            <input type="radio" name="visit_type" value="first" required />
+            <span data-i18n="visitFirst"></span>
+          </label>
+          <label class="radio-option">
+            <input type="radio" name="visit_type" value="returning" />
+            <span data-i18n="visitReturn"></span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Name row -->
+      <div class="form-row">
+        <div class="form-group" style="margin-bottom:0">
+          <label class="form-label" for="nameKanji">
+            <span data-i18n="fieldName"></span>
+            <span class="req" data-i18n="req"></span>
+          </label>
+          <input type="text" id="nameKanji" name="name" required
+            data-placeholder-jp="例：山田 太郎" data-placeholder-en="e.g. Taro Yamada" />
+        </div>
+        <div class="form-group" style="margin-bottom:0">
+          <label class="form-label" for="nameKana">
+            <span data-i18n="fieldKana"></span>
+            <span class="opt" data-i18n="opt"></span>
+          </label>
+          <input type="text" id="nameKana" name="name_kana"
+            data-placeholder-jp="例：やまだ たろう" data-placeholder-en="Phonetic / Furigana" />
+        </div>
+      </div>
+
+      <!-- DOB + Gender -->
+      <div class="form-row" style="margin-top:28px">
+        <div class="form-group" style="margin-bottom:0">
+          <label class="form-label" for="dob">
+            <span data-i18n="fieldDOB"></span>
+            <span class="req" data-i18n="req"></span>
+          </label>
+          <input type="date" id="dob" name="date_of_birth" required />
+        </div>
+        <div class="form-group" style="margin-bottom:0">
+          <label class="form-label" for="gender">
+            <span data-i18n="fieldGender"></span>
+            <span class="opt" data-i18n="opt"></span>
+          </label>
+          <select id="gender" name="gender">
+            <option value="" data-i18n="genderSelect"></option>
+            <option value="male"   data-i18n="genderMale"></option>
+            <option value="female" data-i18n="genderFemale"></option>
+            <option value="other"  data-i18n="genderOther"></option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Phone -->
+      <div class="form-group" style="margin-top:28px">
+        <label class="form-label" for="phone">
+          <span data-i18n="fieldPhone"></span>
+          <span class="req" data-i18n="req"></span>
+        </label>
+        <input type="tel" id="phone" name="phone" required
+          data-placeholder-jp="例：03-1234-5678" data-placeholder-en="e.g. 03-1234-5678" />
+      </div>
+
+      <!-- Email -->
+      <div class="form-group">
+        <label class="form-label" for="email">
+          <span data-i18n="fieldEmail"></span>
+          <span class="req" data-i18n="req"></span>
+        </label>
+        <input type="email" id="email" name="email" required
+          data-placeholder-jp="例：taro@example.com" data-placeholder-en="e.g. taro@example.com" />
+      </div>
+
+      <!-- Department / Consultation type -->
+      <div class="form-group">
+        <label class="form-label" for="department">
+          <span data-i18n="fieldDept"></span>
+          <span class="req" data-i18n="req"></span>
+        </label>
+        <select id="department" name="consultation_type" required>
+          <option value="" data-i18n="deptSelect"></option>
+          <option value="internal"  data-i18n="dept1"></option>
+          <option value="mental"    data-i18n="dept2"></option>
+          <option value="travel"    data-i18n="dept3"></option>
+          <option value="covid"     data-i18n="dept4"></option>
+          <option value="allergy"   data-i18n="dept5"></option>
+          <option value="online"    data-i18n="dept6"></option>
+          <option value="other"     data-i18n="deptOther"></option>
+        </select>
+      </div>
+
+      <!-- Preferred date + time -->
+      <div class="form-row">
+        <div class="form-group" style="margin-bottom:0">
+          <label class="form-label" for="prefDate">
+            <span data-i18n="fieldPrefDate"></span>
+            <span class="opt" data-i18n="opt"></span>
+          </label>
+          <input type="date" id="prefDate" name="preferred_date" />
+        </div>
+        <div class="form-group" style="margin-bottom:0">
+          <label class="form-label" for="prefTime">
+            <span data-i18n="fieldPrefTime"></span>
+            <span class="opt" data-i18n="opt"></span>
+          </label>
+          <select id="prefTime" name="preferred_time">
+            <option value="" data-i18n="timeSelect"></option>
+            <option value="morning"   data-i18n="timeMorning"></option>
+            <option value="afternoon" data-i18n="timeAfternoon"></option>
+            <option value="either"    data-i18n="timeEither"></option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Message -->
+      <div class="form-group" style="margin-top:28px">
+        <label class="form-label" for="message">
+          <span data-i18n="fieldMessage"></span>
+          <span class="opt" data-i18n="opt"></span>
+        </label>
+        <textarea id="message" name="message"
+          data-placeholder-jp="ご質問・症状・ご要望などをご記入ください。"
+          data-placeholder-en="Please describe your symptoms, questions, or any special requests."></textarea>
+      </div>
+
+      <!-- Privacy -->
+      <div class="privacy-row">
+        <input type="checkbox" id="privacy" name="privacy" required />
+        <label for="privacy" data-i18n="privacyLabel"></label>
+      </div>
+
+      <button type="submit" class="btn-submit" data-i18n="btnSubmit"></button>
+    </form>
+  </div>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-card">
+      <h3 data-i18n="sideContactTitle"></h3>
+      <div class="side-item">
+        <div class="side-line"></div>
+        <p>
+          <span class="side-label" data-i18n="lblPhone"></span>
+          <a href="tel:0368093207" class="phone-big">03-6809-3207</a>
+        </p>
+      </div>
+      <div class="side-item">
+        <div class="side-line"></div>
+        <p>
+          <span class="side-label">FAX</span>
+          03-6809-3227
+        </p>
+      </div>
+      <div class="side-item">
+        <div class="side-line"></div>
+        <p>
+          <span class="side-label" data-i18n="lblAddr"></span>
+          <span data-i18n="address"></span>
+        </p>
+      </div>
+    </div>
+
+    <div class="sidebar-card">
+      <h3 data-i18n="sideHoursTitle"></h3>
+      <table class="hours-table-sm">
+        <tr>
+          <td data-i18n="rowMonFri"></td>
+          <td>9:30 – 12:30<br>14:30 – 18:00</td>
+        </tr>
+        <tr>
+          <td data-i18n="rowSat"></td>
+          <td>9:30 – 12:30<br>14:30 – 18:00</td>
+        </tr>
+        <tr>
+          <td data-i18n="rowThu"></td>
+          <td><span class="t-gold" data-i18n="closedAM"></span><br>14:30 – 18:00</td>
+        </tr>
+        <tr>
+          <td data-i18n="rowSun"></td>
+          <td class="t-gold" data-i18n="closedAppt"></td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="sidebar-card" style="background:var(--navy);border-color:var(--navy);">
+      <p style="font-size:13px;color:rgba(255,255,255,.65);line-height:1.7;" data-i18n="sideNote"></p>
+    </div>
+  </aside>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2025 東京タワーヴュークリニック麻布十番 / Tokyo Tower View Clinic Azabujuban &nbsp;|&nbsp; <a href="index.html" data-i18n="backLink"></a></p>
+</footer>
+
+<script>
+const T = {
+  jp: {
+    topHours:       '月〜水・金・土 9:30〜18:00　木曜午後 14:30〜18:00',
+    brandName:      '東京タワーヴュークリニック麻布十番',
+    brandSub:       'Tokyo Tower View Clinic Azabujuban',
+    backLink:       'ホームへ戻る',
+    pageEyebrow:    'ご予約・お問い合わせ',
+    pageTitle:      'ご予約・お問い合わせフォーム',
+    pageDesc:       '以下のフォームにご記入の上、送信してください。通常2営業日以内にご連絡いたします。',
+    successTitle:   'お送りいただきありがとうございます',
+    successDesc:    '2営業日以内にご連絡いたします。お急ぎの場合はお電話ください。',
+    fieldVisitType: '受診区分',
+    req:            '必須',
+    opt:            '任意',
+    visitFirst:     '初診',
+    visitReturn:    '再診',
+    fieldName:      '氏名',
+    fieldKana:      'ふりがな',
+    fieldDOB:       '生年月日',
+    fieldGender:    '性別',
+    genderSelect:   '選択してください',
+    genderMale:     '男性',
+    genderFemale:   '女性',
+    genderOther:    'その他',
+    fieldPhone:     '電話番号',
+    fieldEmail:     'メールアドレス',
+    fieldDept:      '診療内容',
+    deptSelect:     '選択してください',
+    dept1:          '内科・一般診療',
+    dept2:          '心療内科・精神科',
+    dept3:          'トラベルクリニック',
+    dept4:          'COVID-19・ワクチン',
+    dept5:          '漢方・アレルギー',
+    dept6:          '往診・オンライン診療',
+    deptOther:      'その他・ご不明な場合',
+    fieldPrefDate:  'ご希望日',
+    fieldPrefTime:  'ご希望の時間帯',
+    timeSelect:     '選択してください',
+    timeMorning:    '午前（9:30〜12:30）',
+    timeAfternoon:  '午後（14:30〜18:00）',
+    timeEither:     'どちらでも可',
+    fieldMessage:   'ご質問・ご要望',
+    privacyLabel:   'プライバシーポリシーに同意します。いただいた情報は診療目的のみに使用し、第三者に提供することはありません。',
+    btnSubmit:      '送信する',
+    sideContactTitle:'お問い合わせ先',
+    lblPhone:       '電話番号',
+    lblAddr:        '住所',
+    address:        '〒106-0045 東京都港区麻布十番2-14-6 イイダビル1階',
+    sideHoursTitle: '診療時間',
+    rowMonFri:      '月・火・水・金',
+    rowSat:         '土曜',
+    rowThu:         '木曜',
+    rowSun:         '日・祝日',
+    closedAM:       '午前休診',
+    closedAppt:     '休診（要予約）',
+    closedApptFull: '休診（事前予約で応相談）',
+    sideNote:       '※お急ぎの場合はお電話にてお問い合わせください。英語での対応も可能です。',
+  },
+  en: {
+    topHours:       'Mon–Wed, Fri–Sat 9:30–18:00  |  Thu Afternoon 14:30–18:00',
+    brandName:      'Tokyo Tower View Clinic Azabujuban',
+    brandSub:       '東京タワーヴュークリニック麻布十番',
+    backLink:       'Back to Home',
+    pageEyebrow:    'Appointments & Inquiries',
+    pageTitle:      'Appointment Request Form',
+    pageDesc:       'Please complete the form below. We will respond within 2 business days. English-speaking staff available.',
+    successTitle:   'Thank You for Your Message',
+    successDesc:    'We will be in touch within 2 business days. For urgent matters, please call us directly.',
+    fieldVisitType: 'Visit Type',
+    req:            'Required',
+    opt:            'Optional',
+    visitFirst:     'New Patient',
+    visitReturn:    'Returning Patient',
+    fieldName:      'Full Name',
+    fieldKana:      'Furigana / Phonetic',
+    fieldDOB:       'Date of Birth',
+    fieldGender:    'Gender',
+    genderSelect:   'Please select',
+    genderMale:     'Male',
+    genderFemale:   'Female',
+    genderOther:    'Other / Prefer not to say',
+    fieldPhone:     'Phone Number',
+    fieldEmail:     'Email Address',
+    fieldDept:      'Consultation Type',
+    deptSelect:     'Please select',
+    dept1:          'Internal Medicine',
+    dept2:          'Mental Health & Psychiatry',
+    dept3:          'Travel Medicine',
+    dept4:          'COVID-19 & Vaccines',
+    dept5:          'Herbal Medicine & Allergy',
+    dept6:          'House Call / Telemedicine',
+    deptOther:      'Other / Not sure',
+    fieldPrefDate:  'Preferred Date',
+    fieldPrefTime:  'Preferred Time',
+    timeSelect:     'Please select',
+    timeMorning:    'Morning (9:30–12:30)',
+    timeAfternoon:  'Afternoon (14:30–18:00)',
+    timeEither:     'Either is fine',
+    fieldMessage:   'Message / Symptoms',
+    privacyLabel:   'I agree to the Privacy Policy. Information provided will be used solely for medical care purposes and will not be shared with third parties.',
+    btnSubmit:      'Send Appointment Request',
+    sideContactTitle:'Contact Information',
+    lblPhone:       'Phone',
+    lblAddr:        'Address',
+    address:        'IIDA BLDG. 1F, 2-14-6 Azabujuban, Minato-ku, Tokyo 〒106-0045',
+    sideHoursTitle: 'Opening Hours',
+    rowMonFri:      'Mon, Tue, Wed, Fri',
+    rowSat:         'Saturday',
+    rowThu:         'Thursday',
+    rowSun:         'Sun / Holidays',
+    closedAM:       'Morning closed',
+    closedAppt:     'Closed (by appt.)',
+    sideNote:       'For urgent matters, please call us directly. English-speaking staff are available.',
+  }
+};
+
+function applyLang(lang) {
+  const t = T[lang];
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const k = el.getAttribute('data-i18n');
+    if (t[k] !== undefined) el.textContent = t[k];
+  });
+  // Placeholders
+  document.querySelectorAll('[data-placeholder-' + lang + ']').forEach(el => {
+    el.placeholder = el.getAttribute('data-placeholder-' + lang);
+  });
+  document.getElementById('hiddenLang').value = lang;
+}
+
+function setLang(lang) {
+  document.body.classList.toggle('en', lang === 'en');
+  document.documentElement.lang = lang === 'en' ? 'en' : 'ja';
+  document.getElementById('btnJP').classList.toggle('on', lang === 'jp');
+  document.getElementById('btnEN').classList.toggle('on', lang === 'en');
+  applyLang(lang);
+  localStorage.setItem('tvca-lang', lang);
+}
+
+(function () {
+  const saved    = localStorage.getItem('tvca-lang');
+  const detected = (navigator.language || '').startsWith('ja') ? 'jp' : 'en';
+  setLang(saved || detected);
+  // Set success redirect to current page
+  document.getElementById('hiddenNext').value = window.location.href.split('?')[0] + '?success=1';
+})();
+
+// Show success message if redirected back after Formspree submit
+if (new URLSearchParams(window.location.search).get('success') === '1') {
+  document.getElementById('contactForm').style.display = 'none';
+  document.getElementById('successMsg').classList.add('show');
+}
+
+// Client-side validation
+document.getElementById('contactForm').addEventListener('submit', function(e) {
+  const required = this.querySelectorAll('[required]');
+  let valid = true;
+  required.forEach(el => {
+    el.style.borderColor = '';
+    if (el.type === 'checkbox' && !el.checked) {
+      el.closest('.privacy-row').style.outline = '2px solid #c0392b';
+      valid = false;
+    } else if (el.type === 'radio') {
+      const group = this.querySelectorAll('[name="' + el.name + '"]');
+      const checked = Array.from(group).some(r => r.checked);
+      if (!checked) {
+        group.forEach(r => r.closest('.radio-option').style.borderColor = '#c0392b');
+        valid = false;
+      }
+    } else if (!el.value.trim()) {
+      el.style.borderColor = '#c0392b';
+      valid = false;
+    }
+  });
+  if (!valid) e.preventDefault();
+});
+</script>
+</body>
+</html>
